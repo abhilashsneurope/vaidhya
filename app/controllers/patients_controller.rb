@@ -2,7 +2,7 @@ class PatientsController < ApplicationController
 	before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
   def index
-   	@patient = Patient.all
+   	@patients = Patient.all
   end
 
   def show
@@ -30,14 +30,15 @@ class PatientsController < ApplicationController
   end
 
   def update
-ired      if @patient.update(patient_params)
-        format.html { redirect_to @patient, notice: 'Patient was successfully updated.' }
-        format.json { render :show, status: :ok, location: @patient }
-      else
-        format.html { render :edit }
-        format.json { render json: @patient.errors, status: :unprocessable_entity }
+    respond_to do |format|
+      if @patient.update(patient_params)
+          format.html { redirect_to @patient, notice: 'Patient was successfully updated.' }
+          format.json { render :show, status: :ok, location: @patient }
+        else
+          format.html { render :edit }
+          format.json { render json: @patient.errors, status: :unprocessable_entity }
+        end
       end
-    end
   end
 
   def destroy
@@ -55,6 +56,6 @@ ired      if @patient.update(patient_params)
     end
 
     def patient_params
-      params.require(:patient).permit(:name, :address)
+      params.require(:patient).permit(:name, :address, :phone_number, :patient_details, :date )
     end
 end
