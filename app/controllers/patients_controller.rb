@@ -1,5 +1,6 @@
 class PatientsController < ApplicationController
 	before_action :set_patient, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
 
   def index
    	@patients = Patient.all
@@ -9,14 +10,14 @@ class PatientsController < ApplicationController
   end
 
   def new
-    @patient = Patient.new
+    @patient = current_user.patients.build
   end
 
   def edit
   end
 
   def create
-    @patient = Patient.new(patient_params)
+    @patient = current_user.patients.build(patient_params)
 
     respond_to do |format|
       if @patient.save
